@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+    <title>上海市宝山气象信息综合平台</title>
+    <link rel="stylesheet" href="static/css/leaflet.css" crossorigin=""/>
+    <link rel="stylesheet" href="static/css/selfdefine.css"/>
+    <link rel="stylesheet" href="static/css/bootstrap.min.css" crossorigin="anonymous">
+    <script src="static/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="static/js/leaflet.js" crossorigin=""></script>
+    <script src="static/js/jquery-3.3.1.js" crossorigin=""></script>
+    <style>
+        html, body {
+            height: 100%;
+        }
+    </style>
+<!--
+<script>
+var map;
+var zoom = 12;
+function onLoad() {
+    map = new T.Map('mapDiv');
+    map.centerAndZoom(new T.LngLat(116.40769, 39.89945), zoom);
+}
+</script>
+-->
+</head>
+
+<header>
+    <div class="navbar navbar-dark bg-dark box-shadow">
+        <div class="d-flex justify-content-between">
+            <a href="#" class="navbar-brand d-flex align-items-center">
+                <div class="col-2">
+                    <img src="static/images/smallicon.png" alt="..." class="rounded-circle float-left" height="60px" width="60px">
+
+                </div>
+                <div class="col-10">
+                    <h3><strong>&ensp;上海市宝山气象信息平台</strong></h3>
+                    <h6>&ensp;&ensp;Shanghai Baoshan Meteorological GIS</h6>
+                </div>
+            </a>
+        </div>
+    </div>
+</header>
+
+<body onload="startTime()">
+<div class="container-fluid px-0" style="height: 84%">
+    <div class="row" style="height: 100%">
+        <div class="col-8" style="height: 100%">
+            <div id="mapid"></div>
+            <script>
+
+                function getweather(stationList){
+                    console.log(stationList);
+                    var url="http://138.68.4.232:8010/getStationInfo";
+                    var i = 0;
+                    $.getJSON(url,function(jsonObject){
+                        console.log(jsonObject);
+                        for(i = 0; i < stationList.length - 1; i++) {
+                            console.log(i);
+
+                            stationList[i + 1].bindPopup('时间：' + jsonObject[i].datatime + '<br>站点编号：' + jsonObject[i].stationname + jsonObject[i].station + '<hr>' + '气温：' + jsonObject[i].temp + '°C<br>一小时降水：' + jsonObject[i].totalrain1 + 'mm<br>风速：' + jsonObject[i].windlevel + 'm/s');
+                        }
+                    })
+
+                }
+
+                var mymap = L.map('mapid').setView([31.38, 121.45], 11);
+                L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+                    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+                    maxZoom: 18,
+                    id: 'mapbox.streets',
+                    accessToken: 'pk.eyJ1IjoibG91aXMtaGUiLCJhIjoiY2pmOXB4ODBtMHc1OTQwcGQ1bWtwOXd6cCJ9.oQcwnwf-kWE2uzjOh_CcgQ'
+                }).addTo(mymap);
+
+
+                var station = L.icon({
+                    iconUrl: 'static/images/station.png',
+                    shadowUrl: 'static/images/station_shadow.png',
+
+                    iconSize:     [40, 40], // size of the icon
+                    shadowSize:   [35, 25], // size of the shadow
+                    iconAnchor:   [20, 20], // point of the icon which will correspond to marker's location
+                    shadowAnchor: [0, 5],  // the same for the shadow
+                    popupAnchor:  [0, -20] // point from which the popup should open relative to the iconAnchor
+                });
+                var stationList = [];
+                var stationtemp = L.marker([31.1921, 121.4316], {icon: station}).addTo(mymap);//徐家汇
+                stationtemp.bindPopup('徐家汇');
+                stationList.push(stationtemp);
+
+                stationtemp = L.marker([31.3908, 121.4447], {icon: station}).addTo(mymap);//宝山
+                stationtemp.bindPopup('宝山');
+                stationList.push(stationtemp);
+
+                stationtemp = L.marker([31.395, 121.488], {icon: station}).addTo(mymap);//宝山体育场
+                stationtemp.bindPopup('宝山体育场');
+                stationList.push(stationtemp);
+
+                stationtemp = L.marker([31.49183, 121.30783], {icon: station}).addTo(mymap);//罗泾镇林业
+                stationtemp.bindPopup('罗泾镇林业');
+                stationList.push(stationtemp);
+
+                stationtemp = L.marker([31.39526, 121.31913], {icon: station}).addTo(mymap);//罗店度假村
+                stationtemp.bindPopup('罗店度假村');
+                stationList.push(stationtemp);
+
+                stationtemp = L.marker([31.3060, 121.3873], {icon: station}).addTo(mymap);//上大附中
+                stationtemp.bindPopup('上大附中');
+                stationList.push(stationtemp);
+
+                stationtemp = L.marker([31.4689, 121.41616], {icon: station}).addTo(mymap);//石洞口
+                stationtemp.bindPopup('石洞口');
+                stationList.push(stationtemp);
+
+                stationtemp = L.marker([31.40317, 121.4845], {icon: station}).addTo(mymap);//防汛办
+                stationtemp.bindPopup('防汛办');
+                stationList.push(stationtemp);
+
+                stationtemp = L.marker([31.3272, 121.429861], {icon: station}).addTo(mymap);//庙行
+                stationtemp.bindPopup('庙行');
+                stationList.push(stationtemp);
+
+                stationtemp = L.marker([31.31416, 121.40083], {icon: station}).addTo(mymap);//大场
+                stationtemp.bindPopup('大场');
+                stationList.push(stationtemp);
+
+                stationtemp = L.marker([31.3441, 121.4837], {icon: station}).addTo(mymap);//凇南公园
+                stationtemp.bindPopup('凇南公园');
+                stationList.push(stationtemp);
+
+                stationtemp = L.marker([31.422194, 121.4171], {icon: station}).addTo(mymap);//月浦
+                stationtemp.bindPopup('月浦');
+                stationList.push(stationtemp);
+
+                stationtemp = L.marker([31.452027, 121.39916], {icon: station}).addTo(mymap);//月浦农副
+                stationtemp.bindPopup('月浦农副');
+                stationList.push(stationtemp);
+
+                stationtemp = L.marker([31.452027, 121.39916], {icon: station}).addTo(mymap);//顾村
+                stationtemp.bindPopup('顾村');
+                stationList.push(stationtemp);
+
+                stationtemp = L.marker([31.43345, 121.34527], {icon: station}).addTo(mymap);//农科站
+                stationtemp.bindPopup('农科站');
+                stationList.push(stationtemp);
+
+                stationtemp = L.marker([31.48211, 121.3390], {icon: station}).addTo(mymap);//罗径海红村
+                stationtemp.bindPopup('罗径海红村');
+                stationList.push(stationtemp);
+
+                getweather(stationList);
+                /*
+                L.marker([31.3908, 121.4447], {icon: station}).addTo(mymap);//宝山
+                L.marker([31.6664, 121.4927], {icon: station}).addTo(mymap);//崇明
+                L.marker([31.2213, 121.5485], {icon: station}).addTo(mymap);//浦东
+                L.marker([31.103, 121.3659], {icon: station}).addTo(mymap);//闵行
+                L.marker([31.3618, 121.2438], {icon: station}).addTo(mymap);//嘉定
+                L.marker([31.0565, 121.7882], {icon: station}).addTo(mymap);//南汇
+                L.marker([31.1342, 121.1222], {icon: station}).addTo(mymap);//青浦
+                L.marker([30.8873, 121.4955], {icon: station}).addTo(mymap);//奉贤
+                L.marker([30.7434, 121.3434], {icon: station}).addTo(mymap);//金山
+                L.marker([31.0368, 121.2336], {icon: station}).addTo(mymap);//松江
+                */
+                //我是小猪猪 我有个聪明可爱美丽大方的女朋友 她的名字叫北美范冰冰
+
+                //预警信号图层处理
+                /*
+                var states = [{
+                    "type": "Feature",
+                    "properties": {"name": "sea1", "isWater": true, "description": "当前海域蓝色预警"},
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[
+                            [121.3157, 31.5156],
+                            [121.3576, 31.4887],
+                            [121.3692, 31.4935],
+                            [121.4338, 31.4553],
+                            [121.5128, 31.5670],
+                            [121.4091, 31.6133]
+                        ]]
+                    }
+                },{"type": "Feature",
+                    "properties": {"name": "baoshan", "isWater": false, "description": "上海市宝山区蓝色预警"},
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[
+                            [121.30, 31.50],
+                            [121.319, 31.455],
+                            [121.336, 31.429],
+                            [121.3325, 31.414],
+                            [121.331, 31.349],
+                            [121.348, 31.318],
+                            [121.3315, 31.301],
+                            [121.338, 31.2946],
+                            [121.3625, 31.3029],
+                            [121.3598, 31.2928],
+                            [121.381, 31.29],
+                            [121.402, 31.287],
+                            [121.400, 31.277],
+                            [121.4198, 31.2654],
+                            [121.425, 31.30],
+                            [121.435, 31.3207],
+                            [121.4679, 31.3207],
+                            [121.4685, 31.3152],
+                            [121.4963, 31.3116],
+                            [121.4958, 31.33],
+                            [121.5070, 31.3454],
+                            [121.5214, 31.3422],
+                            [121.525199, 31.34678],
+                            [121.5030, 31.3629],
+                            [121.5040, 31.3747],
+                            [121.5215, 31.3952],
+                            [121.4045, 31.4781],
+                            [121.4054, 31.487863],
+                            [121.36156, 31.5078],
+                            [121.343434, 31.512275],
+                            [121.321006, 31.503324]
+                        ]]
+                    }
+                },{"type": "Feature",
+                    "properties": {"name": "jiading", "isWater": false, "description": "上海市嘉定区蓝色预警"},
+                    "geometry": {
+                        "type": "Polygon",
+                            "coordinates": [[
+                                [121.30, 31.50],
+                                [121.319, 31.455],
+                                [121.336, 31.429],
+                                [121.3325, 31.414],
+                                [121.331, 31.349],
+                                [121.348, 31.318],
+                                [121.3315, 31.301],
+                                [121.326, 31.289],
+                                [121.3399, 31.273],
+                                [121.367, 31.269],
+                                [121.3597, 31.2662],
+                                [121.366, 31.2588],
+                                [121.38, 31.258],
+                                [121.374, 31.244],
+                                [121.367978, 31.247461],
+                                [121.3611, 31.238979],
+                                [121.344713, 31.240441],
+                                [121.3340, 31.233],
+                                [121.312759, 31.2273],
+                                [121.2917, 31.233228],
+                                [121.2798, 31.248286],
+                                [121.260948, 31.258797],
+                                [121.2262, 31.2618],
+                                [121.1933, 31.2520],
+                                [121.1696, 31.2561],
+                                [121.16127, 31.2719],
+                                [121.152928, 31.2666],
+                                [121.15138, 31.2798],
+                                [121.15995, 31.2839],
+                                [121.14458, 31.3083],
+                                [121.125, 31.3049],
+                                [121.122, 31.321],
+                                [121.13, 31.3311],
+                                [121.12458, 31.3456],
+                                [121.11246, 31.3456],
+                                [121.10594, 31.374648],
+                                [121.14454, 31.389399],
+                                [121.1528, 31.4108],
+                                [121.142979, 31.423736],
+                                [121.15987, 31.4323],
+                                [121.1417, 31.4443],
+                                [121.2383, 31.4887],
+                                [121.244461, 31.479098],
+                            ]]
+                    }
+                }, {
+                    "type": "Feature",
+                    "properties": {"name": "qingpu", "isWater": false, "description": "上海市青浦区蓝色预警"},
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[
+                            [121.260948, 31.258797],
+                            [121.2262, 31.2618],
+                            [121.1933, 31.2520],
+                            [121.1696, 31.2561],
+                            [121.16127, 31.2719],
+                            [121.152928, 31.2666],
+                            [121.15138, 31.2798],
+                            [121.1358, 31.277],
+                            [121.112, 31.2871],
+                            [121.0969, 31.277093],
+                            [121.0836, 31.2920],
+                            [121.0752, 31.2726],
+                            [121.0577, 31.2699],
+                            [121.057, 31.2288],
+                            [121.0714, 31.1624],
+                            [121.0373, 31.152],
+                            [121.0362, 31.1406],
+                            [120.9758, 31.1324],
+                            [120.9253, 31.14423],
+                            [120.875537, 31.1375],
+                            [120.8512, 31.10546],
+                            [120.899, 31.08108],
+                            [120.8958, 31.020528],
+                            [120.9846, 31.01677],
+                            [120.997, 30.98],
+                            [120.988, 30.9737],
+                            [120.99, 30.95],
+                            [121.0173, 30.94],
+                            [121.0334, 30.947],
+                            [121.0364, 30.957],
+                            [121.0439, 30.959],
+                            [121.0433, 30.9698],
+                            [121.050771, 30.969],
+                            [121.0530, 30.964],
+                            [121.0571, 30.968],
+                            [121.0634, 30.9556],
+                            [121.0977, 30.9657],
+                            [121.1032, 31.009],
+                            [121.088304, 31.02516],
+                            [121.0974, 31.0275],
+                            [121.0966, 31.044],
+                            [121.0814, 31.0573],
+                            [121.09134, 31.0644],
+                            [121.1007, 31.0564],
+                            [121.1269, 31.0592],
+                            [121.1253, 31.067],
+                            [121.0977, 31.096],
+                            [121.1167, 31.111],
+                            [121.1540, 31.0908],
+                            [121.1839, 31.120],
+                            [121.1827, 31.1432],
+                            [121.2274, 31.1388],
+                            [121.2220, 31.1155],
+                            [121.2845, 31.1383],
+                            [121.2784, 31.1509],
+                            [121.3237, 31.1633],
+                            [121.2951, 31.2031],
+                            [121.2770, 31.1936],
+                            [121.2484, 31.2408],
+                            [121.2400, 31.2419],
+
+
+                        ]]
+
+                    }
+                }, {
+                    "type": "Feature",
+                    "properties": {"name": "pudong", "isWater": false, "description": "上海市浦东新区蓝色预警"},
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[
+                            [121.525199, 31.34678],
+                            [121.5030, 31.3629],
+                            [121.5040, 31.3747],
+                            [121.5215, 31.3952],
+                            [121.5827, 31.3732],
+                            [121.6794, 31.3228],
+                            [121.7386, 31.2693],
+                            [121.8136, 31.1731],
+                            [121.8767, 31.1320],
+                            [121.8604, 31.1155],
+                            [121.9347, 31.0088],
+                            [121.9741, 30.9208],
+                            [121.9723, 30.8895],
+                            [121.9654, 30.8807],
+                            [121.8871, 30.8488],
+                            [121.7687, 30.8495],
+                            [121.7800, 30.9263],
+                            [121.7044, 30.9856],
+                            [121.6719, 30.9930],
+                            [121.6193, 30.9930],
+                            [121.6135, 31.0035],
+                            [121.5705, 31.0258],
+                            [121.5523, 31.0218],
+                            [121.5593, 31.0467],
+                            [121.5446, 31.0617],
+                            [121.5748, 31.0812],
+                            [121.5519, 31.0816],
+                            [121.5488, 31.0882],
+                            [121.5671, 31.0949],
+                            [121.5566, 31.1138],
+                            [121.5438, 31.1124],
+                            [121.4888, 31.1241],
+                            [121.4651, 31.1118],
+                            [121.4597, 31.1136],
+                            [121.4657, 31.1260],
+                            [121.4581, 31.1360],
+                            [121.4523, 31.1456],
+                            [121.4542, 31.1510],
+                            [121.4652, 31.1639],
+                            [121.4599, 31.1788],
+                            [121.4637, 31.1851],
+                            [121.4733, 31.1908],
+                            [121.4847, 31.1931],
+                        ]]
+
+                    }
+                }];
+                */
+                var states = [{"type": "Feature",
+                    "properties": {"name": "baoshan", "isWater": false, "description": "上海市宝山区蓝色预警"},
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[
+                            [121.30, 31.50],
+                            [121.319, 31.455],
+                            [121.336, 31.429],
+                            [121.3325, 31.414],
+                            [121.331, 31.349],
+                            [121.348, 31.318],
+                            [121.3315, 31.301],
+                            [121.338, 31.2946],
+                            [121.3625, 31.3029],
+                            [121.3598, 31.2928],
+                            [121.381, 31.29],
+                            [121.402, 31.287],
+                            [121.400, 31.277],
+                            [121.4198, 31.2654],
+                            [121.425, 31.30],
+                            [121.435, 31.3207],
+                            [121.4679, 31.3207],
+                            [121.4685, 31.3152],
+                            [121.4963, 31.3116],
+                            [121.4958, 31.33],
+                            [121.5070, 31.3454],
+                            [121.5214, 31.3422],
+                            [121.525199, 31.34678],
+                            [121.5030, 31.3629],
+                            [121.5040, 31.3747],
+                            [121.5215, 31.3952],
+                            [121.4045, 31.4781],
+                            [121.4054, 31.487863],
+                            [121.36156, 31.5078],
+                            [121.343434, 31.512275],
+                            [121.321006, 31.503324]
+                        ]]
+                    }
+                }];
+
+                var a = L.geoJSON(states, {
+                    style: function(feature) {
+
+                        switch (feature.properties.isWater) {
+                            case true:   return {color: "#0000ff"};
+                            case false:   return {color: "#000000"};
+                        }
+
+                    }
+                }).bindPopup(function (layer) {
+                    return layer.feature.properties.description;
+                }).addTo(mymap);
+
+
+                var popup = L.popup();// 点击事件
+                // 返回点击经纬度
+                function onMapClick(e) {
+                    popup
+                        .setLatLng(e.latlng)
+                        .setContent("You clicked the map at " + e.latlng.toString())
+                        .openOn(mymap);
+                }
+                mymap.on('click', onMapClick);
+            </script>
+        </div>
+        <div class="col-4" style="height: 100%" id="rightcontent">
+            <br>
+            <ul class="nav nav-pills nav-fill">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">实况监视</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">预报制作</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">特殊产品</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">数值预报</a>
+                </li>
+            </ul>
+            <br>
+
+            <h5> WMS实时监测[开发中] </h5>
+            <div class="dmy">
+                <div id="txt"></div>
+            </div>
+            <hr>
+            <h6> 本区预警[未启用] </h6>
+            <h5 class="alarmtitle">
+                <strong>
+                    [开发中]
+                </strong>
+            </h5>
+            <img src="static/images/台风1.jpg" alt="..." class="rounded" height="60px" width="78px">
+            <hr>
+            <h6> 自动站[未启用] </h6>
+            <div class="container">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">站点</th>
+                        <th scope="col">气温</th>
+                        <th scope="col">湿度</th>
+                        <th scope="col">降水</th>
+                        <th scope="col">风速</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">徐家汇</th>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">宝山</th>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">xxx</th>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<footer>
+    <p class="text-muted text-center">&copy; 上海市宝山区气象局 2018</p>
+</footer>
+<!--
+<body onLoad="onLoad()">
+    <div id="mapDiv" style="position:absolute;width:500px; height:400px"></div>
+</body>
+-->
+
+
+<script>
+    function startTime() {
+        getTime();
+        updateWeather();
+        // getweather("58362");
+    }
+
+    function getTime() {
+        var today = new Date();
+        var year=today.getYear()
+        if(year<1000)
+            year+=1900
+        var day=today.getDay()
+        var month=today.getMonth()
+        var daym=today.getDate()
+        if(daym<10)
+            daym="0"+daym
+        var dayarray=new Array("星期日","星期一","星期二","星期三","星期四","星期五","星期六")
+        var montharray=new Array("1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月")
+        //document.write(""+dayarray[day]+", "+montharray[month]+" "+daym+", "+year+"")
+
+        var h = today.getHours();
+        var m = today.getMinutes();
+        var s = today.getSeconds();
+        m = checkTime(m);
+        s = checkTime(s);
+        document.getElementById('txt').innerHTML =
+            "当前时间：" + year + "年"+ montharray[month] + daym + "日 " + dayarray[day] + " " + h + ":" + m + ":" + s;
+        var t = setTimeout(getTime, 500);
+    }
+
+    function updateWeather(){
+        getweather(stationList);
+        var a = setTimeout(updateWeather, 120000);
+    }
+
+    function checkTime(i) {
+        if (i < 10) {i = "0" + i}; // add zero in front of numbers < 10
+        return i;
+    }
+</script>
+</html>
